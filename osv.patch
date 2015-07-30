@@ -1,0 +1,18 @@
+diff --git a/openerp/osv/fields.py b/openerp/osv/fields.py
+index 0ca6842..9e51efe 100644
+--- a/openerp/osv/fields.py
++++ b/openerp/osv/fields.py
+@@ -1029,8 +1029,12 @@ class many2many(_column):
+                     d1 = ''
+                 cr.execute('delete from '+rel+' where '+id1+'=%s AND '+id2+' IN (SELECT '+rel+
+
+-                for act_nbr in act[2]:
+-                    cr.execute('insert into '+rel+' ('+id1+','+id2+') values (%s, %s)', (id, a
++                if act[2]:
++                    base = 'insert into '+rel+' ('+id1+','+id2+') values '
++                    for act_nbr in act[2]:
++                        base += "(%s, %s)," % (id, act_nbr)
++
++                    cr.execute(base[:-1])
+
+     #
